@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>THE GOAT UZI | Sigma Cyber Ghost</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Share+Tech+Mono&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #000;
+      color: #0f0;
+      font-family: 'Share Tech Mono', monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+      cursor: default;
+    }
+
+    /* CRT Scan Lines */
+    body::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        rgba(0, 20, 0, 0.12) 1px,
+        transparent 2px
+      );
+      pointer-events: none;
+      z-index: 10;
+      animation: scanMove 10s linear infinite;
+    }
+
+    @keyframes scanMove {
+      0% { background-position: 0 0; }
+      100% { background-position: 0 4px; }
+    }
+
+    .grid-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        linear-gradient(rgba(0, 30, 0, 0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 30, 0, 0.07) 1px, transparent 1px);
+      background-size: 28px 28px;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    canvas#matrix {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    .profile-container {
+      position: relative;
+      z-index: 20;
+      margin-bottom: 25px;
+    }
+
+    .profile-pic {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid #0a0;
+      box-shadow: 0 0 12px rgba(0, 200, 0, 0.5);
+    }
+
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.6rem;
+      margin-bottom: 30px;
+      letter-spacing: 2px;
+      text-shadow: 0 0 8px #0f0, 0 0 16px #0a0;
+      z-index: 20;
+      position: relative;
+    }
+
+    .social-links {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      width: 90%;
+      max-width: 400px;
+      z-index: 20;
+      position: relative;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 13px 20px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 1.05rem;
+      background: rgba(0, 15, 0, 0.6);
+      color: #0f0;
+      text-decoration: none;
+      border: 1px solid #080;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      letter-spacing: 1px;
+      backdrop-filter: blur(2px);
+    }
+
+    .btn:hover {
+      background: rgba(0, 30, 0, 0.8);
+      box-shadow: 0 0 12px rgba(0, 255, 0, 0.5);
+      transform: translateX(4px);
+      border-color: #0f0;
+    }
+
+    .footer {
+      margin-top: 25px;
+      font-size: 0.8rem;
+      color: #080;
+      opacity: 0.6;
+      z-index: 20;
+      position: relative;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="matrix"></canvas>
+  <div class="grid-overlay"></div>
+
+  <audio id="bgm" autoplay loop>
+    <source src="file:///C:/Users/CYBER_GHOST/Downloads/the%20goat%20uzi.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="profile-container">
+    <img 
+      src="file:///C:/Users/CYBER_GHOST/Downloads/IMG_20251031_120421_742.jpg" 
+      alt="THE GOAT UZI" 
+      class="profile-pic"
+      onerror="this.style.display='none';"
+    />
+  </div>
+
+  <h1>THE GOAT UZI</h1>
+
+  <div class="social-links">
+    <a href="https://www.youtube.com/@Uzibhaiofficial" target="_blank" class="btn">
+      <span>❱❱</span> YOUTUBE
+    </a>
+    <a href="https://www.instagram.com/safderkhan0800_/" target="_blank" class="btn">
+      <span>❱❱</span> INSTAGRAM
+    </a>
+    <a href="https://www.tiktok.com/@uzi.bhai.gandageer.101?_r=1&_t=ZS-917lCpCUs59" target="_blank" class="btn">
+      <span>❱❱</span> TIKTOK (OLD)
+    </a>
+    <a href="https://www.tiktok.com/@goatuzibhaiofficial?_r=1&_t=ZN-917lGc9qqVK" target="_blank" class="btn">
+      <span>❱❱</span> TIKTOK (NEW)
+    </a>
+  </div>
+
+  <div class="footer">[ACCESS GRANTED • SIGMA CYBER GHOST]</div>
+
+  <script>
+    // Unlock audio on first user interaction
+    document.body.addEventListener('click', function initAudio() {
+      const audio = document.getElementById('bgm');
+      audio.play().catch(e => console.warn("Audio playback failed:", e));
+      document.body.removeEventListener('click', initAudio);
+    });
+
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // Full phrase including spaces
+    const phrase = "THE GOAT UZI".split(''); // ['T','H','E',' ','G','O','A','T',' ','U','Z','I']
+    const fontSize = 16;
+    const fontFamily = "'Share Tech Mono', monospace";
+    ctx.font = `${fontSize}px ${fontFamily}`;
+    const charWidth = ctx.measureText("W").width;
+
+    // Cover entire width: one column per character width
+    const columnCount = Math.floor(canvas.width / charWidth) + 2;
+    const drops = [];
+
+    for (let i = 0; i < columnCount; i++) {
+      drops[i] = {
+        x: i * charWidth,
+        charIndex: Math.floor(Math.random() * phrase.length),
+        y: Math.floor(Math.random() * -100) // start above
+      };
+    }
+
+    function draw() {
+      // Fade trail
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = '#0f0';
+      ctx.font = `${fontSize}px ${fontFamily}`;
+      ctx.textBaseline = 'top';
+
+      for (let i = 0; i < drops.length; i++) {
+        const drop = drops[i];
+        const char = phrase[drop.charIndex];
+        ctx.fillText(char, drop.x, drop.y * fontSize);
+
+        // Advance to next character in "THE GOAT UZI"
+        drop.charIndex = (drop.charIndex + 1) % phrase.length;
+
+        // Move down
+        drop.y++;
+
+        // Occasionally reset when far below
+        if (drop.y * fontSize > canvas.height + 200 && Math.random() > 0.995) {
+          drop.y = Math.floor(Math.random() * -100);
+        }
+      }
+    }
+
+    setInterval(draw, 50);
+
+    // Handle resize
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      const newCount = Math.floor(canvas.width / charWidth) + 2;
+      drops.length = 0;
+      for (let i = 0; i < newCount; i++) {
+        drops[i] = {
+          x: i * charWidth,
+          charIndex: Math.floor(Math.random() * phrase.length),
+          y: Math.floor(Math.random() * -100)
+        };
+      }
+    });
+  </script>
+</body>
+</html>
