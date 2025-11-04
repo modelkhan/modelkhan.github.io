@@ -92,7 +92,6 @@
         0 0 20px #0f0,
         0 0 30px #0f0;
       animation: pulseGlow 2s infinite alternate;
-      background: rgba(0, 20, 0, 0.3);
     }
 
     @keyframes pulseGlow {
@@ -242,18 +241,18 @@
   <canvas id="matrix"></canvas>
   <div class="grid-overlay"></div>
 
-  <!-- Audio won't work locally unless file is in same folder -->
+  <!-- Audio: muted autoplay → unmuted on interaction -->
   <audio id="bgm" preload="auto" muted>
-    <source src="the goat uzi.mp3" type="audio/mpeg">
+    <source src="https://modelkhan.github.io/the%20goat%20uzi.mp3" type="audio/mpeg">
   </audio>
 
   <button id="play-audio-btn" title="Unmute / Mute">🔇</button>
   <div id="audio-status"></div>
 
-  <!-- ⚠️ LOCAL FILE PATH — ONLY WORKS ON YOUR PC -->
+  <!-- Profile Image from GitHub Pages -->
   <div class="profile-container">
     <img 
-      src="file:///C:/Users/CYBER_GHOST/Downloads/IMG_20251031_120421_742.jpg" 
+      src="https://modelkhan.github.io/IMG_20251031_120421_742.jpg" 
       alt="THE GOAT UZI" 
       class="profile-pic"
       onerror="this.style.display='none';"
@@ -277,7 +276,8 @@
     </a>
   </div>
 
-  <div class="footer">Created by Sigma Cyber Ghost</div>
+  <!-- Professional, responsive yellow footer -->
+  <div class="footer">CREATED BY SIGMA CYBER GHOST</div>
 
   <script>
     const audio = document.getElementById('bgm');
@@ -286,6 +286,8 @@
 
     audio.volume = 0.5;
     audio.loop = true;
+
+    // Start muted (allowed by all browsers)
     audio.play().catch(() => {});
 
     function updateButton() {
@@ -299,6 +301,7 @@
       setTimeout(() => statusEl.style.opacity = '0', 2000);
     }
 
+    // Enable sound on first user interaction
     function initAudio() {
       audio.muted = false;
       audio.play().catch(() => {});
@@ -311,6 +314,7 @@
     document.addEventListener('click', initAudio, { once: true });
     document.addEventListener('touchstart', initAudio, { once: true });
 
+    // Manual mute toggle
     playBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       audio.muted = !audio.muted;
@@ -364,7 +368,7 @@
       }
     }
 
-    setInterval(draw, 50);
+    let matrixInterval = setInterval(draw, 50);
 
     window.addEventListener('resize', () => {
       resizeCanvas();
