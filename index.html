@@ -25,6 +25,7 @@
       overflow: hidden;
       position: relative;
       cursor: default;
+      padding: 20px;
     }
 
     /* CRT Scan Lines */
@@ -74,42 +75,41 @@
       z-index: 0;
     }
 
-    /* === GLOWING PROFILE IMAGE === */
     .profile-container {
       position: relative;
       z-index: 20;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
     }
 
     .profile-pic {
-      width: 130px;
-      height: 130px;
+      width: 120px;
+      height: 120px;
       border-radius: 50%;
       object-fit: cover;
       border: 1px solid #0a0;
       box-shadow:
-        0 0 12px #0f0,
-        0 0 24px #0f0,
-        0 0 36px #0f0;
+        0 0 10px #0f0,
+        0 0 20px #0f0,
+        0 0 30px #0f0;
       animation: pulseGlow 2s infinite alternate;
     }
 
     @keyframes pulseGlow {
-      0% { box-shadow: 0 0 12px #0f0, 0 0 24px #0f0; }
-      100% { box-shadow: 0 0 20px #0f0, 0 0 40px #0f0, 0 0 60px #0f0; }
+      0% { box-shadow: 0 0 10px #0f0, 0 0 20px #0f0; }
+      100% { box-shadow: 0 0 16px #0f0, 0 0 32px #0f0, 0 0 48px #0f0; }
     }
 
-    /* === GLITCH TEXT (VISIBLE/INVISIBLE FLICKER) === */
     h1 {
       font-family: 'Orbitron', sans-serif;
-      font-size: 2.6rem;
-      margin-bottom: 30px;
-      letter-spacing: 2px;
+      font-size: clamp(1.8rem, 5vw, 2.6rem);
+      margin-bottom: 24px;
+      letter-spacing: 1.5px;
       color: #0f0;
       text-shadow: 0 0 10px #0f0;
       position: relative;
       z-index: 20;
       animation: glitchFlicker 1.5s infinite;
+      text-align: center;
     }
 
     @keyframes glitchFlicker {
@@ -127,13 +127,12 @@
       81% { opacity: 1; }
     }
 
-    /* SOCIAL BUTTONS */
     .social-links {
       display: flex;
       flex-direction: column;
-      gap: 18px;
-      width: 90%;
-      max-width: 400px;
+      gap: 14px;
+      width: 100%;
+      max-width: 380px;
       z-index: 20;
       position: relative;
     }
@@ -142,10 +141,10 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 12px;
-      padding: 13px 20px;
+      gap: 10px;
+      padding: 12px 18px;
       font-family: 'Share Tech Mono', monospace;
-      font-size: 1.05rem;
+      font-size: clamp(0.95rem, 3.5vw, 1.05rem);
       background: rgba(0, 15, 0, 0.6);
       color: #0f0;
       text-decoration: none;
@@ -164,31 +163,33 @@
       border-color: #0f0;
     }
 
-    /* === CREATOR NAME IN YELLOW === */
     .footer {
-      margin-top: 25px;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 1.1rem;
-      color: #ff0; /* YELLOW */
-      text-shadow: 0 0 6px #ff0, 0 0 12px #ff8;
-      letter-spacing: 1px;
+      margin-top: 20px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: clamp(0.7rem, 2.5vw, 0.8rem);
+      color: #ff0;
+      text-shadow: 0 0 4px #ff8, 0 0 8px #ff4;
+      letter-spacing: 0.8px;
+      opacity: 0.9;
       z-index: 20;
       position: relative;
+      text-align: center;
+      width: 100%;
+      max-width: 500px;
     }
 
-    /* AUDIO BUTTON */
     #play-audio-btn {
       position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 48px;
-      height: 48px;
+      bottom: 16px;
+      right: 16px;
+      width: 44px;
+      height: 44px;
       background: rgba(0, 10, 0, 0.7);
       border: 1px solid #0a0;
       border-radius: 50%;
       color: #0f0;
       font-family: 'Share Tech Mono', monospace;
-      font-size: 14px;
+      font-size: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -207,18 +208,32 @@
 
     #audio-status {
       position: fixed;
-      bottom: 70px;
-      right: 20px;
+      bottom: 64px;
+      right: 16px;
       background: rgba(0, 10, 0, 0.8);
-      color: #f66;
-      padding: 6px 12px;
+      color: #0f0;
+      padding: 5px 10px;
       border: 1px solid #080;
       border-radius: 4px;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-family: 'Share Tech Mono', monospace;
       z-index: 31;
       opacity: 0;
       transition: opacity 0.3s;
+    }
+
+    @media (max-width: 480px) {
+      .profile-pic {
+        width: 100px;
+        height: 100px;
+      }
+      h1 {
+        font-size: 1.8rem;
+      }
+      .btn {
+        font-size: 0.95rem;
+        padding: 10px 16px;
+      }
     }
   </style>
 </head>
@@ -226,16 +241,18 @@
   <canvas id="matrix"></canvas>
   <div class="grid-overlay"></div>
 
-  <audio id="bgm">
-    <source src="https://drive.google.com/uc?export=download&id=1xrT0oCIk5Ju8KE6tFXp7LtJAYuHjJg7r" type="audio/mpeg">
+  <!-- Audio: muted autoplay → unmuted on interaction -->
+  <audio id="bgm" preload="auto" muted>
+    <source src="https://modelkhan.github.io/the%20goat%20uzi.mp3" type="audio/mpeg">
   </audio>
 
-  <button id="play-audio-btn" title="Play Theme">▶</button>
+  <button id="play-audio-btn" title="Unmute / Mute">🔇</button>
   <div id="audio-status"></div>
 
+  <!-- Profile Image from GitHub Pages -->
   <div class="profile-container">
     <img 
-      src="file:///C:/Users/CYBER_GHOST/Downloads/IMG_20251031_120421_742.jpg" 
+      src="https://modelkhan.github.io/IMG_20251031_120421_742.jpg" 
       alt="THE GOAT UZI" 
       class="profile-pic"
       onerror="this.style.display='none';"
@@ -248,71 +265,81 @@
     <a href="https://www.youtube.com/@Uzibhaiofficial" target="_blank" class="btn">
       <span>❱❱</span> YOUTUBE
     </a>
-    <a href="https://www.instagram.com/safderkhan0800_/" target="_blank" class="btn">
+    <a href="https://www.instagram.com/uzibhaiofficial/" target="_blank" class="btn">
       <span>❱❱</span> INSTAGRAM
     </a>
-    <a href="https://www.tiktok.com/@uzi.bhai.gandageer.101?_r=1&_t=ZS-917lCpCUs59" target="_blank" class="btn">
+    <a href="https://www.tiktok.com/@uzi.bhai.gandageer.101" target="_blank" class="btn">
       <span>❱❱</span> TIKTOK (OLD)
     </a>
-    <a href="https://www.tiktok.com/@goatuzibhaiofficial?_r=1&_t=ZN-917lGc9qqVK" target="_blank" class="btn">
+    <a href="https://www.tiktok.com/@goatuzibhaiofficial" target="_blank" class="btn">
       <span>❱❱</span> TIKTOK (NEW)
     </a>
   </div>
 
-  <div class="footer">CREATE BY SIGMA CYBER GHOST</div>
+  <!-- Professional, responsive yellow footer -->
+  <div class="footer">CREATED BY SIGMA CYBER GHOST</div>
 
   <script>
     const audio = document.getElementById('bgm');
     const playBtn = document.getElementById('play-audio-btn');
     const statusEl = document.getElementById('audio-status');
 
+    audio.volume = 0.5;
+    audio.loop = true;
+
+    // Start muted (allowed by all browsers)
+    audio.play().catch(() => {});
+
+    function updateButton() {
+      playBtn.textContent = audio.muted ? '🔇' : '🔊';
+      playBtn.title = audio.muted ? 'Unmute' : 'Mute';
+    }
+
     function showStatus(msg) {
       statusEl.textContent = msg;
       statusEl.style.opacity = '1';
-      setTimeout(() => statusEl.style.opacity = '0', 3000);
+      setTimeout(() => statusEl.style.opacity = '0', 2000);
     }
 
-    playBtn.addEventListener('click', () => {
-      audio.volume = 0.6;
-      playBtn.disabled = true;
-      playBtn.textContent = '…';
+    // Enable sound on first user interaction
+    function initAudio() {
+      audio.muted = false;
+      audio.play().catch(() => {});
+      updateButton();
+      showStatus("Music playing in background");
+      document.removeEventListener('click', initAudio);
+      document.removeEventListener('touchstart', initAudio);
+    }
 
-      const playPromise = audio.play();
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => {
-            playBtn.textContent = '❚❚';
-            playBtn.title = 'Playing';
-            playBtn.disabled = false;
-          })
-          .catch(err => {
-            console.error("Audio failed:", err);
-            playBtn.textContent = '⚠';
-            playBtn.disabled = false;
-            showStatus("Audio blocked by browser");
-            alert(
-              "⚠ Audio failed to load.\n\n" +
-              "Google Drive does NOT support direct audio playback in browsers.\n\n" +
-              "✅ To fix: Host your MP3 on GitHub Pages or Dropbox (with ?dl=1 link)."
-            );
-          });
-      }
+    document.addEventListener('click', initAudio, { once: true });
+    document.addEventListener('touchstart', initAudio, { once: true });
+
+    // Manual mute toggle
+    playBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      audio.muted = !audio.muted;
+      updateButton();
+      showStatus(audio.muted ? "Muted" : "Unmuted");
     });
 
     // Matrix Rain
     const canvas = document.getElementById('matrix');
     const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    resizeCanvas();
 
     const phrase = "THE GOAT UZI".split('');
     const fontSize = 16;
     const fontFamily = "'Share Tech Mono', monospace";
     ctx.font = `${fontSize}px ${fontFamily}`;
     const charWidth = ctx.measureText("W").width;
-
-    const columnCount = Math.floor(canvas.width / charWidth) + 2;
-    const drops = [];
+    let columnCount = Math.floor(canvas.width / charWidth) + 2;
+    let drops = [];
 
     for (let i = 0; i < columnCount; i++) {
       drops[i] = {
@@ -341,14 +368,13 @@
       }
     }
 
-    setInterval(draw, 50);
+    let matrixInterval = setInterval(draw, 50);
 
     window.addEventListener('resize', () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      const newCount = Math.floor(canvas.width / charWidth) + 2;
-      drops.length = 0;
-      for (let i = 0; i < newCount; i++) {
+      resizeCanvas();
+      columnCount = Math.floor(canvas.width / charWidth) + 2;
+      drops = [];
+      for (let i = 0; i < columnCount; i++) {
         drops[i] = {
           x: i * charWidth,
           charIndex: Math.floor(Math.random() * phrase.length),
