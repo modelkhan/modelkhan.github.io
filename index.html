@@ -92,6 +92,7 @@
         0 0 20px #0f0,
         0 0 30px #0f0;
       animation: pulseGlow 2s infinite alternate;
+      background: rgba(0, 20, 0, 0.3); /* Fallback if image fails */
     }
 
     @keyframes pulseGlow {
@@ -249,13 +250,14 @@
   <button id="play-audio-btn" title="Unmute / Mute">🔇</button>
   <div id="audio-status"></div>
 
-  <!-- ✅ FIXED: Use lowercase, simple filename -->
+  <!-- ✅ FIXED FOR MOBILE: Simple filename, lazy loading, fallback bg -->
   <div class="profile-container">
     <img 
       src="https://modelkhan.github.io/profile.jpg" 
       alt="THE GOAT UZI" 
       class="profile-pic"
-      onerror="this.style.display='none';"
+      loading="lazy"
+      onerror="this.style.display='none'; this.parentNode.style.backgroundColor='#002200'"
     />
   </div>
 
@@ -285,6 +287,8 @@
 
     audio.volume = 0.5;
     audio.loop = true;
+
+    // Start muted (allowed by all browsers)
     audio.play().catch(() => {});
 
     function updateButton() {
@@ -298,6 +302,7 @@
       setTimeout(() => statusEl.style.opacity = '0', 2000);
     }
 
+    // Enable sound on first user interaction
     function initAudio() {
       audio.muted = false;
       audio.play().catch(() => {});
@@ -310,6 +315,7 @@
     document.addEventListener('click', initAudio, { once: true });
     document.addEventListener('touchstart', initAudio, { once: true });
 
+    // Manual mute toggle
     playBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       audio.muted = !audio.muted;
