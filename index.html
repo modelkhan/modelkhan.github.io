@@ -92,7 +92,7 @@
         0 0 20px #0f0,
         0 0 30px #0f0;
       animation: pulseGlow 2s infinite alternate;
-      background: rgba(0, 20, 0, 0.3); /* Fallback if image fails */
+      background: rgba(0, 20, 0, 0.3);
     }
 
     @keyframes pulseGlow {
@@ -242,22 +242,21 @@
   <canvas id="matrix"></canvas>
   <div class="grid-overlay"></div>
 
-  <!-- Audio: muted autoplay → unmuted on interaction -->
+  <!-- Audio won't work locally unless file is in same folder -->
   <audio id="bgm" preload="auto" muted>
-    <source src="https://modelkhan.github.io/the%20goat%20uzi.mp3" type="audio/mpeg">
+    <source src="the goat uzi.mp3" type="audio/mpeg">
   </audio>
 
   <button id="play-audio-btn" title="Unmute / Mute">🔇</button>
   <div id="audio-status"></div>
 
-  <!-- ✅ FIXED FOR MOBILE: Simple filename, lazy loading, fallback bg -->
+  <!-- ⚠️ LOCAL FILE PATH — ONLY WORKS ON YOUR PC -->
   <div class="profile-container">
     <img 
-      src="https://modelkhan.github.io/profile.jpg" 
+      src="file:///C:/Users/CYBER_GHOST/Downloads/IMG_20251031_120421_742.jpg" 
       alt="THE GOAT UZI" 
       class="profile-pic"
-      loading="lazy"
-      onerror="this.style.display='none'; this.parentNode.style.backgroundColor='#002200'"
+      onerror="this.style.display='none';"
     />
   </div>
 
@@ -287,8 +286,6 @@
 
     audio.volume = 0.5;
     audio.loop = true;
-
-    // Start muted (allowed by all browsers)
     audio.play().catch(() => {});
 
     function updateButton() {
@@ -302,7 +299,6 @@
       setTimeout(() => statusEl.style.opacity = '0', 2000);
     }
 
-    // Enable sound on first user interaction
     function initAudio() {
       audio.muted = false;
       audio.play().catch(() => {});
@@ -315,7 +311,6 @@
     document.addEventListener('click', initAudio, { once: true });
     document.addEventListener('touchstart', initAudio, { once: true });
 
-    // Manual mute toggle
     playBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       audio.muted = !audio.muted;
